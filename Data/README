@@ -1,0 +1,4 @@
+#README
+This file is where the Data processed by the program is sent
+The Raw Intensity Values will be saved in rawData.txt
+The data from the differential equation calculations will be saved in processedData.txt
