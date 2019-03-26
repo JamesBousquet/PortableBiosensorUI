@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO
+iimport RPi.GPIO as GPIO
 from PIL import Image
 import numpy as np
 from libtiff import TIFF
@@ -34,14 +34,8 @@ class PortableBiosensorUIProcessingFunctions():
         self.numberOfPixels = (self.X2-self.X1)*(self.Y2-self.Y1)
     def differenceCalc(self,X,Y): # calculates the differential output of the two input mean based on built diifferential equations
         numerator = self.numeratorFunc(X, Y)
-        print("numerator:")
-        print(numerator)
         denominator = self.denominatorFunc(X, Y)
-        print("denominator:")
-        print(denominator)
         answer = numerator/denominator
-        print("answer: ")
-        print(answer)
         return answer
         
     def build_function(self,filename): # builds the differential equation in two seperate parts
@@ -52,18 +46,16 @@ class PortableBiosensorUIProcessingFunctions():
     def processPic(self,imageName):
         image_file = TIFF.open(imageName, mode='r')
         image_gray = image_file.read_image()
-        print(" ")
         total = long(0)
-        for x in range(self.X1,self.X2):
-            for y in range(self.Y1,self.Y2):
-                numberIn = long(image_gray[y,x])
+        xrange = range(self.X1,self.X2)
+        yrange = range(self.Y1,self.Y2)
+        for x in xrange:
+            for y in yrange:
+                numberIn = image_gray[y,x]
                 total = total + numberIn
-        print("mean: ")
-        mean = float(total/self.numberOfPixels)
+        mean = float(total/(self.numberOfPixels))
         image_file.close()
-        print(mean)
         return mean
-        
     def updateLaserState(self):
         val1 = GPIO.input(11)
         val2 = GPIO.input(12)

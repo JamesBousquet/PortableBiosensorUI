@@ -25,11 +25,15 @@ import tkMessageBox
 from Tkinter import *
 from PIL import Image, ImageTk
 
+
+
+
+
 originalImageWidth = 1288
 originalImageHeight = 964
-BORDERWIDTH = 5
+BORDERWIDTH = 0.0
 BLUE_COLOR = '#3f88bf'
-WHITE_COLOR = '#1D69A4'
+WHITE_COLOR = '#1D69A4' # Red = 29  Green = 105  Blue = 164
 TEXT_COLOR = '#ffffff'
 BUTTON_COLOR = '#1D69A4'
 
@@ -38,7 +42,11 @@ LARGE_FONT = ("Arial", 16)
 SMALL_FONT = ("Arial", 8)
 style.use("ggplot")
 iconSize = (275,275)
+buttonSize = (175,30)
+buttonSizeSmall = (100,30)
 
+#mostRecentPhotoName = 'Biosensor_Images/880nm_12in.tif'
+#mostRecentPhotoFigure = Figure(figsize=(5,5), dpi=100)
 
 f = Figure(figsize=(5,5), dpi=100)
 rawPlot = f.add_subplot(121) # 121 = 1x2 figure plot number 1
@@ -64,12 +72,6 @@ def animate(i):
                 if len(eachLine) > 1:
                     x, y,laserNumberTxt,filename = eachLine.split(',')
                     laserNumber = int(laserNumberTxt)
-                    print(" ")
-                    print(x)
-                    print(y)
-                    print(laserNumber)
-                    print(filename)
-                    print(" ")
                     if(laserNumber==1):
                         xList1.append(int(x))
                         yList1.append(float(y))
@@ -119,12 +121,22 @@ def animate(i):
         processedPlot.set_xlim([0,len(xList12)+1])
         rawPlot.set_title('Raw Data')
         processedPlot.set_title('Difference Equation Data')
-
+'''def updateImage(i):
+    if app.PauseFeed == false:
+        counterGlobal++
+        file = open()
+        
+'''
 class PortableBiosensorUI(tk.Tk):
     # Container Class, add a new page here after the class is created
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self,*args, **kwargs)
         self.PAUSE = True
+        img = Image.open('UIPictures/blue_button3.png')
+        resizedImg=img.resize(buttonSize, Image.ANTIALIAS)
+        resizedSmallImg = img.resize(buttonSizeSmall, Image.ANTIALIAS)
+        self.buttonBackground = ImageTk.PhotoImage(resizedImg)
+        self.buttonBackgroundSmall = ImageTk.PhotoImage(resizedSmallImg)
         container = tk.Frame(self)
         self.geometry('1250x700')
         container.pack(side="top", fill="both", expand = True)
@@ -155,15 +167,14 @@ class PortableBiosensorUI(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent,bg=WHITE_COLOR)
-        label = tk.Label(self, text="Welcome to the Portable Biosensor UI!", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        label = tk.Label(self,text="Welcome to the Portable Biosensor UI!", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         label.pack(pady=10, padx=10)
         
         self.subframe = tk.Frame(self,bg=WHITE_COLOR)
         self.subframe.pack(side="top",padx=250,pady = 50)
-        
-        help_button = tk.Button(self.subframe, text="Need Help?",borderwidth=BORDERWIDTH,command=lambda: controller.show_frame(HelpPage),background=BUTTON_COLOR,foreground=TEXT_COLOR)
+        help_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,text="Need Help?",borderwidth=BORDERWIDTH,compound=CENTER,command=lambda: controller.show_frame(HelpPage),background=BUTTON_COLOR,foreground=TEXT_COLOR)
         help_button.pack(side=tk.LEFT,padx=15)
-        testPrep_button = tk.Button(self.subframe, text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        testPrep_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         testPrep_button.pack(side=tk.LEFT,padx=15)
         
         load = Image.open('UIPictures/teamlogo.png')
@@ -189,7 +200,7 @@ class TestPrepPage(tk.Frame):
         label = tk.Label(self, text="Test Preparation Menu", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         label.pack(pady=20, padx=10)
         
-        instructionsLabel = tk.Label(self, text="Select desired option and hit Start Test when ready", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        instructionsLabel = tk.Label(self,text="Select desired option and hit Start Test when ready", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         instructionsLabel.pack(pady=20)
         
         # making the icons as buttons
@@ -227,14 +238,6 @@ class TestPrepPage(tk.Frame):
         
         self.buttonFrame.pack(pady=100)
         
-        '''
-        DifEqEditor_button = tk.Button(self, text="Difference Equation Editor",command=lambda: controller.show_frame(DifferenceEquationEditorPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        DifEqEditor_button.pack(pady=30)
-        AOI_button = tk.Button(self, text="Area of Interest Editor",command=lambda: controller.show_frame(AreaOfInterestPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        AOI_button.pack(pady=30)
-        startTest_button = tk.Button(self, text="Start Test",command=self.startTest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        startTest_button.pack(pady=30)
-        '''
         
     def startTest(self,event):
         app.PAUSE = False
@@ -250,9 +253,18 @@ class AlignmentCameraPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
-        label.pack(pady=10, padx=10)
-        back_button = tk.Button(self, text="Return",command=lambda: controller.show_frame(TestPrepPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        back_button.pack()  
+        label.pack(pady=10, padx=15)
+        back_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        back_button.pack(pady=15)
+        image_file = TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
+        image = image_file.read_image()/256
+        self.load = Image.fromarray(image)
+        self.scale = .60
+        self.resized=self.load.resize((int(originalImageWidth*self.scale), int(originalImageHeight*self.scale)))
+        self.render = ImageTk.PhotoImage(self.resized)
+        self.samplePic = Label(self,image=self.render)
+        self.samplePic.image = self.render
+        self.samplePic.pack()
         
         
 class AreaOfInterestPage(tk.Frame):
@@ -296,8 +308,7 @@ class AreaOfInterestPage(tk.Frame):
         
         # currentCenterCoordinatesLabel = Label(self.entrySubframe, text = "",font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         
-        #self.drawButton = Button(self, text="Draw",command=self.updateCanvas,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        #self.drawButton.pack()
+
         
         #scaling factor of picture
         self.scaleDownBy = 2
@@ -315,7 +326,7 @@ class AreaOfInterestPage(tk.Frame):
         self.canvas = Canvas(self.canvasFrame, width=self.resized.size[0], height=self.resized.size[1])
         self.canvas.create_image(0,0,anchor=NW,image=self.render)
         self.rectangleDrawn = self.canvas.create_rectangle(0,0,self.scaledImageWidth,self.scaledImageHeight,outline=WHITE_COLOR,fill='grey',stipple='@GraphingAssets/transparent.xbm',width=2)
-        self.canvas.grid(row=0)
+        self.canvas.pack()
         self.entrySubframe.grid(row = 0, column = 0, sticky="nsew",pady=50)
         self.canvasFrame.grid(row = 0, column = 1, sticky="nsew",pady=50,padx=70)
         x1, y1 = (self.scaledImageWidth/2 - 2), (self.scaledImageHeight/2 - 2)
@@ -331,14 +342,16 @@ class AreaOfInterestPage(tk.Frame):
         self.buttonSubframe.grid(row = 8,column = 1)
         
         # submit button
-        self.submit_button = Button(self.buttonSubframe, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.submit_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
         
         # return button
-        self.return_button = Button(self.buttonSubframe, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = '#3f88bf',foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.return_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.return_button.pack(side = tk.LEFT, padx=20)
         
-        
+        # info label
+        infoLabel = tk.Label(self.canvasFrame, text="Note: The image shown is scaled by 1/2.\n\nThe image area shown in the blue box is still the\n\narea which will be analysed in the non-scaled image.", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        infoLabel.pack(pady=15)  
         
     def showKeyboard(self,event):
         os.system("killall matchbox-keyboard")
@@ -352,7 +365,6 @@ class AreaOfInterestPage(tk.Frame):
             
             x1, y1 = (centerW - 1), (centerH - 1)
             x2, y2 = (centerW + 1), (centerH + 1)
-            
             width = int(self.widthEntry.get())
             height = int(self.heightEntry.get())
             widthLeft = int(centerW - width/2)
@@ -362,7 +374,7 @@ class AreaOfInterestPage(tk.Frame):
             self.canvas.delete(self.rectangleDrawn)
             self.canvas.delete(self.centerDrawn)
             self.centerDrawn = self.canvas.create_oval(x1, y1, x2, y2, fill=WHITE_COLOR)
-            self.rectangleDrawn = self.canvas.create_rectangle(widthLeft,heightLeft,widthRight,heightRight,outline=WHITE_COLOR,fill='grey',stipple='@GraphingAssets/transparent.xbm',width=2)
+            self.rectangleDrawn = self.canvas.create_rectangle(widthLeft-1,heightLeft-1,widthRight,heightRight,outline=WHITE_COLOR,fill='grey',stipple='@GraphingAssets/transparent.xbm',width=1)
             self.widthLeft =  widthLeft
             self.widthRight = widthRight
             self.heightLeft = heightLeft
@@ -407,11 +419,11 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.subframe.pack(side="top",padx=250,pady=self.padyVal)
         
         # submit button
-        self.submit_button = Button(self.subframe, text="Submit",command=lambda: self.equationEditorSave(controller),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.submit_button = Button(self.subframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=lambda: self.equationEditorSave(controller),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
         
         # return button
-        self.return_button = Button(self.subframe, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = '#3f88bf',foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.return_button = Button(self.subframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.return_button.pack(side = tk.LEFT, padx=20)
         
         # inserting picture
@@ -473,15 +485,31 @@ class GUIPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         label = tk.Label(self, text="GUI", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         label.pack(pady=10,padx=10)
-        
-        switch_button = tk.Button(self, text="View the Sample",command=lambda: controller.show_frame(PictureDisplayPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        switch_button.pack(side=tk.TOP)
+        self.controller=controller
+        buttonFrame = Frame(self,bg=WHITE_COLOR)       
+        switch_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View the Sample",command=self.showPicDisplay,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        switch_button.grid(row=0,column=0,padx=10)
+        self.pause_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Pause Graph",command=self.pauseAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.pause_button.grid(row=0,column=1)
+        self.resume_button= tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Resume Graph",command=self.resumeAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        buttonFrame.pack()
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand = 1)
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
+    def pauseAnimation(self):
+        app.PAUSE = True
+        self.pause_button.grid_forget()
+        self.resume_button.grid(row=0,column=1,padx=10)
+    def resumeAnimation(self):
+        app.PAUSE = False
+        self.resume_button.grid_forget()
+        self.pause_button.grid(row=0,column=1,padx=10)
+    def showPicDisplay(self):
+        self.pauseAnimation()
+        self.controller.show_frame(PictureDisplayPage)
 
 
    
@@ -490,52 +518,44 @@ class PictureDisplayPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         label = tk.Label(self, text="Sample Picture Display", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
         label.pack(pady=10, padx=10)
-        switch_button = tk.Button(self, text="View Graphical Data",command=lambda: controller.show_frame(GUIPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        switch_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View Graphical Data",command=lambda: controller.show_frame(GUIPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         switch_button.pack()  
         
-
-
-def donothing(): # UI test function
-    print("doing nothing")
-    
-def testPrint(test): # UI test function
-    print(test.get())
+        image_file = TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
+        image = image_file.read_image()/256
+        self.load = Image.fromarray(image)
+        self.scale = .65
+        self.resized=self.load.resize((int(originalImageWidth*self.scale), int(originalImageHeight*self.scale)))
+        self.render = ImageTk.PhotoImage(self.resized)
+        self.samplePic = Label(self,image=self.render)
+        self.samplePic.image = self.render
+        self.samplePic.pack()
+    def showGraph(self):
+        app.PAUSE = False
+        self.controller.show_frame(PictureDisplayPage)
+        
 
 def writeToTextFile(nameOfFile,textToBeSaved): # writes over the current text file with the input information
     file = open(nameOfFile,"w")
     file.write(textToBeSaved)
     file.close()
-    
 def readTextFile(nameOfFile): # reads the text file and return the resulting information in whole
     readText = (open(nameOfFile,"r").read())
     return readText
     
-def startAnimation(): # starts animation of the graph
-    PAUSE  = False
-    
-def stopAnimation(): # stops animation of the graph, should be stopped when the graph isnt displayed
-    PAUSE = True
-
 
 
 
 
 app = PortableBiosensorUI()
 ani = animation.FuncAnimation(f, animate, interval=5000)
+#cameraAnimations = animation.FuncAnimation(f,updateImage,interval=5000)
 
 # interval is in milliseconds, interval set to 20 second (20000 ms)
 app.mainloop()
 
 def qf(stringtoprint):
     print(stringtoprint)
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
