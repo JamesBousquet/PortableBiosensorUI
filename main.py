@@ -9,7 +9,7 @@ add videos
 '''
 import matplotlib
 import os
-import time
+import glob
 from libtiff import TIFF
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
@@ -28,7 +28,6 @@ from PIL import Image, ImageTk
 
 
 
-
 originalImageWidth = 1288
 originalImageHeight = 964
 BORDERWIDTH = 0.0
@@ -36,14 +35,15 @@ BLUE_COLOR = '#3f88bf'
 WHITE_COLOR = '#1D69A4' # Red = 29  Green = 105  Blue = 164
 TEXT_COLOR = '#ffffff'
 BUTTON_COLOR = '#1D69A4'
-
-TITLE_FONT = ("Arial", 24)
+TITLE_FONT = ("Arial", 36)
 LARGE_FONT = ("Arial", 16)
 SMALL_FONT = ("Arial", 8)
 style.use("ggplot")
 iconSize = (275,275)
 buttonSize = (175,30)
 buttonSizeSmall = (100,30)
+
+
 
 #mostRecentPhotoName = 'Biosensor_Images/880nm_12in.tif'
 #mostRecentPhotoFigure = Figure(figsize=(5,5), dpi=100)
@@ -60,7 +60,6 @@ def animate(i):
         pullData.append(open("Data/rawData.txt","r").read())
         rawPlot.clear()
         for eachFile in pullData:
-         
             dataList = eachFile.split('\n')
             xList1 = []
             yList1 = []
@@ -73,24 +72,22 @@ def animate(i):
                     x, y,laserNumberTxt,filename = eachLine.split(',')
                     laserNumber = int(laserNumberTxt)
                     if(laserNumber==1):
-                        xList1.append(int(x))
+                        xList1.append(x)
                         yList1.append(float(y))
                     if(laserNumber==2):
-                        xList2.append(int(x))
+                        xList2.append(x)
                         yList2.append(float(y))
                     if(laserNumber==3):   
-                        xList3.append(int(x))
+                        xList3.append(x)
                         yList3.append(float(y))
         rawPlot.scatter(xList1, yList1, color = 'r')
         rawPlot.scatter(xList2, yList2, color = '#ffff05')
         rawPlot.scatter(xList3, yList3, color = 'b')
-        
         pullDataProcessed = []
         pullDataProcessed.append(open("Data/processedData.txt","r").read())
         i = 1
         processedPlot.clear()
         for eachFile in pullDataProcessed:
-         
             dataList = eachFile.split('\n')
             xList12 = []
             yList12 = []
@@ -100,25 +97,24 @@ def animate(i):
             yList31 = []
             for eachLine in dataList:
                 if len(eachLine) > 1:
-                    x, y,laserNumberTxt,filename = eachLine.split(',')
+                    x, y,laserNumberTxt = eachLine.split(',')
                     laserNumber = int(laserNumberTxt)
                     if(laserNumber==12):
-                        xList12.append(int(x))
+                        xList12.append(x)
                         yList12.append(float(y))
                     if(laserNumber==23):
-                        xList23.append(int(x))
+                        xList23.append(x)
                         yList23.append(float(y))  
                     if(laserNumber==31):
-                        xList31.append(int(x))
+                        xList31.append(x)
                         yList31.append(float(y))
         processedPlot.scatter(xList12, yList12, color = '#ffa500')
         processedPlot.scatter(xList23, yList23, color = 'g')
         processedPlot.scatter(xList31, yList31, color = 'm')
-        
         rawPlot.set_ylim([0,66000])
-        rawPlot.set_xlim([0,len(xList1)+1])
-        processedPlot.set_ylim([0,66000])
-        processedPlot.set_xlim([0,len(xList12)+1])
+        rawPlot.set_xlim([0,len(xList1)+5])
+        processedPlot.set_ylim([0,10])
+        processedPlot.set_xlim([0,len(xList12)+5])
         rawPlot.set_title('Raw Data')
         processedPlot.set_title('Difference Equation Data')
 '''def updateImage(i):
@@ -160,6 +156,7 @@ class PortableBiosensorUI(tk.Tk):
         answer = tkMessageBox.askquestion('Return to Start Page', message = 'Are you sure you want to return to start page?', icon = 'warning')
         if answer == 'yes':
             app.PAUSE = True
+            turnOffProcessor()
             self.show_frame(StartPage)
 # Lambda function: quick throw away function to allow us to pass arguements with function to command= in button
 
@@ -241,6 +238,7 @@ class TestPrepPage(tk.Frame):
         
     def startTest(self,event):
         app.PAUSE = False
+        os.system('sudo python processing.py &')
         self.controller.show_frame(GUIPage)
     def cameraEvent(self,event):
         self.controller.show_frame(AlignmentCameraPage)
@@ -332,8 +330,8 @@ class AreaOfInterestPage(tk.Frame):
         x1, y1 = (self.scaledImageWidth/2 - 2), (self.scaledImageHeight/2 - 2)
         x2, y2 = (self.scaledImageWidth/2 + 2), (self.scaledImageHeight/2 + 2)
         self.centerDrawn = self.canvas.create_oval(x1, y1, x2, y2, fill=WHITE_COLOR)
-        self.currentCenterLabel = Label(self.entrySubframe, text = "Image Center X: " + str(self.scaledImageWidth/2) + "\n\n Image Center Y: "+ str(self.scaledImageHeight/2), font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
-        self.currentDimLabel = Label(self.entrySubframe, text = "Image Width: " + str(self.scaledImageWidth) + "\n\n Image Height: "+ str(self.scaledImageHeight), font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        self.currentCenterLabel = Label(self.entrySubframe, text = "Image Center X: " + str(self.scaledImageWidth) + "\n\n Image Center Y: "+ str(self.scaledImageHeight), font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        self.currentDimLabel = Label(self.entrySubframe, text = "Image Width: " + str(self.scaledImageWidth*2) + "\n\n Image Height: "+ str(self.scaledImageHeight*2), font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.currentCenterLabel.grid(row=9,column = 1,pady=10)
         self.currentDimLabel.grid(row=10,column = 1,pady=10)
         
@@ -360,8 +358,8 @@ class AreaOfInterestPage(tk.Frame):
         
         if ((self.centerWEntry.get() != 0) and(self.centerHEntry.get() != 0) and (self.widthEntry.get() != 0) and (self.heightEntry.get() != 0)):
             
-            centerW = int(self.centerWEntry.get())
-            centerH = int(self.centerHEntry.get())
+            centerW = int(int(self.centerWEntry.get())/2)
+            centerH = int(int(self.centerHEntry.get())/2)
             
             x1, y1 = (centerW - 1), (centerH - 1)
             x2, y2 = (centerW + 1), (centerH + 1)
@@ -382,7 +380,7 @@ class AreaOfInterestPage(tk.Frame):
     def saveAreaOfInterest(self):
         noEvent = 0
         self.updateCanvas(noEvent)
-        writeToTextFile("Equations/aoi.txt",str(self.scaleDownBy*self.widthLeft)+"\n"+str(self.scaleDownBy*self.heightLeft)+"\n"+str(self.scaleDownBy*self.widthRight)+"\n"+str(self.scaleDownBy*self.heightRight))
+        writeToTextFile("Equations/aoi.txt",str(self.widthLeft)+"\n"+str(self.heightLeft)+"\n"+str(self.widthRight)+"\n"+str(self.heightRight))
         
 
 
@@ -397,7 +395,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.rightFrame = tk.Frame(self,bg=WHITE_COLOR)
         
         # equation entry 
-        self.title = tk.Label(self.leftFrame, text = "\nDifference Equation Editor", font = TITLE_FONT,bg = WHITE_COLOR,fg=TEXT_COLOR)
+        self.title = tk.Label(self.leftFrame, text = "Difference Equation Editor", font = TITLE_FONT,bg = WHITE_COLOR,fg=TEXT_COLOR)
         self.legend = tk.Label(self.leftFrame, text = "For equation use:\n X for first Laser \n Y for second Laser\n\n Note:\nVariables must be capitolized!\nMultiplication Symbol (*) is never assumed!\n Example: 2X must be typed as 2*X", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.numeratorEntryLabel = tk.Label(self.leftFrame, text = "\nEnter the numerator portion of difference equation: ", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.denominatorEntryLabel = tk.Label(self.leftFrame, text = "Enter the denominator portion of difference equation:", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
@@ -416,7 +414,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         
         #button frame
         self.subframe = tk.Frame(self.leftFrame,bg=WHITE_COLOR)
-        self.subframe.pack(side="top",padx=250,pady=self.padyVal)
+        self.subframe.pack(side="top",pady=self.padyVal)
         
         # submit button
         self.submit_button = Button(self.subframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=lambda: self.equationEditorSave(controller),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
@@ -435,7 +433,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.laserSetupPic.image = self.render
         self.laserSetupPic.pack()
         self.legend.pack()
-        self.leftFrame.grid(row = 0)
+        self.leftFrame.grid(row = 0,padx = 100,pady=25)
         self.rightFrame.grid(row = 0, column = 1)
         
     def updateEquationShown(self):
@@ -542,20 +540,45 @@ def writeToTextFile(nameOfFile,textToBeSaved): # writes over the current text fi
 def readTextFile(nameOfFile): # reads the text file and return the resulting information in whole
     readText = (open(nameOfFile,"r").read())
     return readText
+def turnOffProcessor():
+    writeToTextFile('Data/processorState.txt','0')
+def turnOnProcessor():
+    writeToTextFile('Data/processorState.txt','1')
     
 
 
 
 
 app = PortableBiosensorUI()
-ani = animation.FuncAnimation(f, animate, interval=5000)
+ani = animation.FuncAnimation(f, animate, interval=10000)
 #cameraAnimations = animation.FuncAnimation(f,updateImage,interval=5000)
 
 # interval is in milliseconds, interval set to 20 second (20000 ms)
 app.mainloop()
+turnOffProcessor()
 
-def qf(stringtoprint):
-    print(stringtoprint)
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
