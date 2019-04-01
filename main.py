@@ -72,13 +72,13 @@ def animate(i):
                     x, y,laserNumberTxt,filename = eachLine.split(',')
                     laserNumber = int(laserNumberTxt)
                     if(laserNumber==1):
-                        xList1.append(x)
+                        xList1.append(float(x))
                         yList1.append(float(y))
                     if(laserNumber==2):
-                        xList2.append(x)
+                        xList2.append(float(x))
                         yList2.append(float(y))
                     if(laserNumber==3):   
-                        xList3.append(x)
+                        xList3.append(float(x))
                         yList3.append(float(y))
         rawPlot.scatter(xList1, yList1, color = 'r')
         rawPlot.scatter(xList2, yList2, color = '#ffff05')
@@ -100,21 +100,22 @@ def animate(i):
                     x, y,laserNumberTxt = eachLine.split(',')
                     laserNumber = int(laserNumberTxt)
                     if(laserNumber==12):
-                        xList12.append(x)
+                        xList12.append(float(x))
                         yList12.append(float(y))
                     if(laserNumber==23):
-                        xList23.append(x)
+                        xList23.append(float(x))
                         yList23.append(float(y))  
                     if(laserNumber==31):
-                        xList31.append(x)
+                        xList31.append(float(x))
                         yList31.append(float(y))
         processedPlot.scatter(xList12, yList12, color = '#ffa500')
         processedPlot.scatter(xList23, yList23, color = 'g')
         processedPlot.scatter(xList31, yList31, color = 'm')
+        xmax = int(xList1[-1]+5)
         rawPlot.set_ylim([0,66000])
-        rawPlot.set_xlim([0,len(xList1)+5])
+        rawPlot.set_xlim([0,xmax])
         processedPlot.set_ylim([0,10])
-        processedPlot.set_xlim([0,len(xList12)+5])
+        processedPlot.set_xlim([0,xmax])
         rawPlot.set_title('Raw Data')
         processedPlot.set_title('Difference Equation Data')
 '''def updateImage(i):
@@ -557,12 +558,6 @@ ani = animation.FuncAnimation(f, animate, interval=10000)
 app.mainloop()
 turnOffProcessor()
 
-
-    
-    
-    
-    
-    
     
     
     
