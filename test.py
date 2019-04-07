@@ -39,6 +39,6 @@ while i<5:
 writeToTextFile('Data/processorState.txt','0')
 os.system("sudo mkdir /media/pi/EXTSTORAGE/Portable_Biosensor_Data")
 os.system("sudo cp -f Biosensor_Images /media/pi/EXTSTORAGE/Portable_Biosensor_Data/.")
-os.system("sudo rm Biosensor_Image/*.tiff")
+os.system("sudo rm Biosensor_Images/*.tiff")
 os.system("sudo cp Data /media/pi/EXTSTORAGE/Portable_Biosensor_Data/.")
-os.system("sudo rm Biosensor_Image/*.tiff")
+os.system("sudo rm Data/*.txt")
