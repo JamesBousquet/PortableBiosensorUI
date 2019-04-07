@@ -6,3 +6,8 @@ os.system("sudo touch Data/rawData.txt")
 os.system("sudo touch Equations/aoi.txt")
 os.system("sudo touch Equations/denominator.txt")
 os.system("sudo touch Equations/numerator.txt")
+
+os.system("sudo touch Equations/processorState.txt")
+file = open('Equations/processorState.txt',"w")
+file.write('0')
+file.close()
