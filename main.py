@@ -7,6 +7,18 @@ Whenever adding a new page, must add it to container class
 TODO
 add videos
 '''
+''' INFORMATION#
+Using Python 2
+Must start program from sudo user to write successfully
+to run navigate to SampleUI file in terminal and launch with "sudo python main.py &"
+Whenever adding a new page, must add it to container class
+
+NEED numpy 1.16 for camera to work
+
+
+TODO
+add videos
+'''
 import matplotlib
 import os
 import glob
@@ -255,7 +267,7 @@ class AlignmentCameraPage(tk.Frame):
         label.pack(pady=10, padx=15)
         back_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         back_button.pack(pady=15)
-        image_file = TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
+        image_file = TIFF.open('Biosensor_Images/Acquisition-1-0.tiff', mode='r') #TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
         image = image_file.read_image()/256
         self.load = Image.fromarray(image)
         self.scale = .60
@@ -465,7 +477,6 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.updateEquationShown()
         
         self.repack()
-    
     def repack(self): # call whenever information has been refreshed been refreshed to reorient screen correctly for the equation editor page
         # forgetting current pack
         self.leftFrame.grid_forget()
@@ -558,6 +569,12 @@ ani = animation.FuncAnimation(f, animate, interval=10000)
 app.mainloop()
 turnOffProcessor()
 
+
+    
+    
+    
+    
+    
     
     
     
