@@ -2,12 +2,15 @@ import os
 import PySpin
 import time
 import RPi.GPIO as GPIO
+POUT = 7
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11,GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(12,GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
+GPIO.setup(POUT,GPIO.OUT)
 NUM_IMAGES = 1
+
 img_num = 1
+GPIO.output(POUT, GPIO.LOW)
 def configure_custom_image_settings(nodemap):
     try:
         result = True
@@ -42,6 +45,7 @@ def acquire_images(cam, nodemap, nodemap_tldevice):
     :rtype: bool
     """
     global img_num
+    global startTimeOFCamera
     try:
         result = True
         node_acquisition_mode = PySpin.CEnumerationPtr(nodemap.GetNode('AcquisitionMode'))
@@ -64,14 +68,9 @@ def acquire_images(cam, nodemap, nodemap_tldevice):
                     image_converted = image_result.Convert(PySpin.PixelFormat_Mono16)
                     # Create a unique filename
                     print('LASERSTATE: %d' % LASERSTATE)
-                    filename = 'Biosensor_Images/Acquisition-%d-%d.tiff' % (LASERSTATE, img_num)
-                    timeStart3 = time.time()
+                    filename = 'Biosensor_Images/Acquisition%d-%d-%f-.tiff' % (img_num,LASERSTATE, time.time()-startTimeOFCamera)
                     image_converted.Save(filename)
-                    timeDiff3 = time.time() - timeStart3
-                    print('TIMEDIFF3: ')
-                    print(timeDiff3)
-                    print(' ')
-                    #print 'Image saved at %s' % filename
+                    print 'Image saved at %s' % filename
                     image_result.Release()
                     print ''
                     img_num +=1
@@ -100,24 +99,28 @@ def run_single_camera(cam):
         if not configure_custom_image_settings(nodemap):
             return False
         # Acquire images
-        timeStart2 = time.time()
         result &= acquire_images(cam, nodemap, nodemap_tldevice)
-        timeDiff2 = time.time() - timeStart2
-        print('TIMEDIFF: ')
-        print(timeDiff2)
-        print(' ')
         # Deinitialize camera
         cam.DeInit()
     except PySpin.SpinnakerException as ex:
         print 'Error: %s' % ex
         result = False
     return result
-    
+def initServos():
+    GPIO.output(POUT, GPIO.HIGH)
+    check = getLaserState()
+    while(check == 0):
+        time.sleep(.1)
+        check = getLaserState()
+    return True
 def getLaserState():
     val1 = GPIO.input(11)
     val2 = GPIO.input(12)
     laserState = 1*val1+2*val2
     return laserState
+    
+    
+    
 ON = 1
 cam_system = PySpin.System.GetInstance()
 # Retrieve list of cameras from the system
@@ -129,20 +132,35 @@ LASERSTATE = 2
 previousLaserState = 2
 result = 1
 stateFile = 'Data/processorState.txt' 
+startTimeOFCamera = time.time()
+returnval = initServos()
 while (ON != 0):
-    LASERSTATE = getLaserState() # use this instead of LASERSTATE once actually connected
+    LASERSTATE = getLaserState()
     timestart = time.time()
-    if(LASERSTATE != previousLaserState):
-        result &= run_single_camera(cam)
+    if((LASERSTATE != previousLaserState) and (LASERSTATE != 0)):
+        print("Before Snapshot")
+        try:
+            result &= run_single_camera(cam)
+        except:
+            print("Failed Snapshot")
+        print("After Snapshot")
         timediff = time.time()-timestart
         print(timediff)
         previousLaserState = LASERSTATE
-    text_file = open(stateFile, "r")
-    lines = text_file.read()
-    ON = int(lines[0])
+    try:
+        text_file = open(stateFile, "r")
+        lines = text_file.read()
+        ON = int(lines[0])
+    except:
+        ON = 1
+strout = 'ON = ' + str(ON)
+print(strout)
 del cam
 cam_list.Clear()
+GPIO.output(POUT, GPIO.LOW)
 print('Camera Turned Off')
+GPIO.cleanup()
+
 
 
 

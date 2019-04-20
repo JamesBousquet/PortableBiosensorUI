@@ -1,4 +1,3 @@
-import RPi.GPIO as GPIO
 from PIL import Image
 import numpy as np
 from libtiff import TIFF
@@ -11,11 +10,7 @@ import PySpin
 
 open('Data/rawData.txt', 'w').close()
 open('Data/processedData.txt', 'w').close()
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11,GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(12,GPIO.IN, pull_up_down=GPIO.PUD_UP) # ***** CHANGE TO DOWN WHEN DONE TESTING
 timeStart = 0
-LASERSTATE = 0
 previousTime = 0
 ON = 1
 previous_file = 'nothing'
@@ -23,7 +18,7 @@ stateFile = 'Data/processorState.txt'
 file = open(stateFile,"w")
 file.write('1')
 file.close()
-os.system("sudo python test.py &")
+
 
 
 class PortableBiosensorUIProcessingFunctions():
@@ -31,7 +26,7 @@ class PortableBiosensorUIProcessingFunctions():
         self.numeratorFunc = self.build_function('Equations/numerator.txt')
         self.denominatorFunc = self.build_function('Equations/denominator.txt')
         self.setAreaOfInterest()
-        self.laser1 = 0
+        self.laser1 = 0 # mean value holders
         self.laser2 = 0
         self.laser3 = 0
         self.quantizedTimeStamp = 0
@@ -49,18 +44,31 @@ class PortableBiosensorUIProcessingFunctions():
     def differenceCalc(self,X,Y): # calculates the differential output of the two input mean based on built diifferential equations
         numerator = self.numeratorFunc(X, Y)
         denominator = self.denominatorFunc(X, Y)
+        if denominator == 0:
+            return 0
         answer = numerator/denominator
         return answer
         
-    def build_function(self,filename): # builds the differential equation in two seperate parts
+    def build_function(self,filename): # builds the differential equation from text file
         with open(filename, 'rU') as f:
             eqn = f.read().strip()
             exec("def fcn(X, Y):\n return ({})".format(eqn))
             return locals()['fcn']
             
-    def processPic(self,imageName,laserNumber,timeStamp):
-        image_file = TIFF.open(imageName, mode='r')
+    def processPic(self,imageName):
+        print("processPicCalled: "+ imageName)
+        outW = 0
+        parsed_name = imageName.split('-')
+        laserNumber = int(parsed_name[1])
+        timeStamp = float(parsed_name[2])
+        while(outW < 500):
+            try:
+                image_file = TIFF.open(imageName, mode='r')
+                outW = 501
+            except:
+                outW += 1 
         image_gray = image_file.read_image()
+        outW = 0
         total = long(0)
         xrange = range(self.X1,self.X2)
         yrange = range(self.Y1,self.Y2)
@@ -80,17 +88,8 @@ class PortableBiosensorUIProcessingFunctions():
         if laserNumber == 3:
             self.laser3 = mean
             self.updateDataFile(self.quantizedTimeStamp,mean,3,imageName,"Data/rawData.txt")
-            self.updateDifferenceData(timeStamp)
+            self.updateDifferenceData(self.quantizedTimeStamp)
             
-    def updateLaserState(self):
-        val1 = GPIO.input(11)
-        val2 = GPIO.input(12)
-        self.laserState = 1*val1+2*val2
-        
-    def getLaserState(self):
-        self.updateLaserState()
-        return self.laserState
-        
     def updateDataFile(self, timeStamp,value,laserNumber,imageName,filename):
         with open(filename, "a") as text_file:
             text_file.write(str(timeStamp) +","+str(value)+","+str(laserNumber)+","+imageName+"\n")
@@ -124,35 +123,36 @@ class PortableBiosensorUIProcessingFunctions():
 first=0
 app = PortableBiosensorUIProcessingFunctions()
 os.system("sudo python Camera.py &")
-laserState = -1
-previousLaserState = 0
-result = 1
-timeStart = time.time()
-timeDiff = 0
-previous_file = ' '
 list_of_files = glob.glob('Biosensor_Images/*')
-latest_file = max(list_of_files,key=os.path.getctime)
+out = 0
+while(out == 0):
+    try:
+        latest_file = max(list_of_files,key=os.path.getctime)
+        out = 1
+    except:
+        list_of_files = glob.glob('Biosensor_Images/*')
 previous_file = latest_file
 while (ON != 0):
     list_of_files = glob.glob('Biosensor_Images/*')
     latest_file = max(list_of_files,key=os.path.getctime)
     if(previous_file != latest_file):
-        LASERSTATE = app.getLaserState()
-        app.processPic(previous_file,LASERSTATE,timeDiff)
-        timeDiff = time.time()-timeStart
-        timeStart = time.time()
-        #print(timeDiff)
+        app.processPic(previous_file)
     previous_file = latest_file
-    text_file = open(stateFile, "r")
-    lines = text_file.read()
-    ON = int(lines[0])
+    try:
+        text_file = open(stateFile, "r")
+        lines = text_file.read()
+        ON = int(lines[0])
+    except:
+        ON = 1
 
-app.processPic(previous_file,LASERSTATE,timeDiff)
+try:
+    app.processPic(previous_file,timeDiff)
+except:
+    ON = 0
 
 
 
 print('Processor Turned Off')
-    
 
 
 

@@ -4,31 +4,24 @@ Must start program from sudo user to write successfully
 to run navigate to SampleUI file in terminal and launch with "sudo python main.py &"
 Whenever adding a new page, must add it to container class
 
-TODO
-add videos
-'''
-''' INFORMATION#
-Using Python 2
-Must start program from sudo user to write successfully
-to run navigate to SampleUI file in terminal and launch with "sudo python main.py &"
-Whenever adding a new page, must add it to container class
-
 NEED numpy 1.16 for camera to work
 
 
 TODO
 add videos
 '''
-import matplotlib
 import os
+os.system("sudo python Alignment.py &")
+import matplotlib
 import glob
 from libtiff import TIFF
+import RPi.GPIO as GPIO
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
-
+import time
 import Tkinter as tk
 import tkFont
 import ttk
@@ -36,6 +29,8 @@ from ttk import *
 import tkMessageBox
 from Tkinter import *
 from PIL import Image, ImageTk
+GPIO.setmode(GPIO.BOARD)
+
 
 
 
@@ -56,6 +51,8 @@ buttonSize = (175,30)
 buttonSizeSmall = (100,30)
 
 
+YMAX = 1
+
 
 #mostRecentPhotoName = 'Biosensor_Images/880nm_12in.tif'
 #mostRecentPhotoFigure = Figure(figsize=(5,5), dpi=100)
@@ -68,6 +65,7 @@ processedPlot = f.add_subplot(122) # 121 = 1x2 figure plot number 2
 # animation function for displaying graphs
 def animate(i):
     if app.PAUSE == False:
+        global YMAX
         pullData = []
         pullData.append(open("Data/rawData.txt","r").read())
         rawPlot.clear()
@@ -99,6 +97,7 @@ def animate(i):
         pullDataProcessed.append(open("Data/processedData.txt","r").read())
         i = 1
         processedPlot.clear()
+        ymax = .1
         for eachFile in pullDataProcessed:
             dataList = eachFile.split('\n')
             xList12 = []
@@ -111,6 +110,8 @@ def animate(i):
                 if len(eachLine) > 1:
                     x, y,laserNumberTxt = eachLine.split(',')
                     laserNumber = int(laserNumberTxt)
+                    if (float(y) > YMAX):
+                        YMAX = float(y)
                     if(laserNumber==12):
                         xList12.append(float(x))
                         yList12.append(float(y))
@@ -123,10 +124,14 @@ def animate(i):
         processedPlot.scatter(xList12, yList12, color = '#ffa500')
         processedPlot.scatter(xList23, yList23, color = 'g')
         processedPlot.scatter(xList31, yList31, color = 'm')
-        xmax = int(xList1[-1]+5)
+        try:
+            xmax = int(xList1[-1]+5)
+            ymax = 1.2*float(YMAX)
+        except:
+            xmax = 10
         rawPlot.set_ylim([0,66000])
         rawPlot.set_xlim([0,xmax])
-        processedPlot.set_ylim([0,10])
+        processedPlot.set_ylim([0,ymax])
         processedPlot.set_xlim([0,xmax])
         rawPlot.set_title('Raw Data')
         processedPlot.set_title('Difference Equation Data')
@@ -170,7 +175,10 @@ class PortableBiosensorUI(tk.Tk):
         if answer == 'yes':
             app.PAUSE = True
             turnOffProcessor()
+            turnOffCamera()
             self.show_frame(StartPage)
+            transferDataToStorage()
+            
 # Lambda function: quick throw away function to allow us to pass arguements with function to command= in button
 
 # Pages
@@ -263,20 +271,43 @@ class TestPrepPage(tk.Frame):
 class AlignmentCameraPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
-        label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
-        label.pack(pady=10, padx=15)
-        back_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        back_button.pack(pady=15)
-        image_file = TIFF.open('Biosensor_Images/Acquisition-1-0.tiff', mode='r') #TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
+        self.label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
+        self.label.pack(pady=5, padx=15)
+        self.label = tk.Label(self, text="Tap Picture to Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
+        self.label.pack(pady=5, padx=15)
+        self.timeStart = 0
+        self.back_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.back_button.pack(pady=15)
+        image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
         self.load = Image.fromarray(image)
         self.scale = .60
-        self.resized=self.load.resize((int(originalImageWidth*self.scale), int(originalImageHeight*self.scale)))
+        self.resized=self.load.resize((int(originalImageWidth*.7), int(originalImageHeight*.55)))
         self.render = ImageTk.PhotoImage(self.resized)
         self.samplePic = Label(self,image=self.render)
         self.samplePic.image = self.render
         self.samplePic.pack()
+        self.samplePic.bind("<Button-1>", self.updatePicture)
         
+    def updatePicture(self,event):
+        timeProgress = time.time() - self.timeStart
+        self.timeStart = time.time()
+        if timeProgress > 3:
+            self.inProgress = True
+            os.system("sudo python Alignment.py &")
+            self.samplePic.pack_forget()
+            time.sleep(1.6)
+            out = 0
+            image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
+            image = image_file.read_image()/256
+            self.load = Image.fromarray(image)
+            self.resized=self.load.resize((int(originalImageWidth*self.scale), int(originalImageHeight*self.scale)))
+            self.render = ImageTk.PhotoImage(self.resized)
+            self.samplePic = Label(self,image=self.render)
+            self.samplePic.image = self.render
+            self.samplePic.pack()
+            self.samplePic.bind("<Button-1>", self.updatePicture)
+            self.inProgress = False
         
 class AreaOfInterestPage(tk.Frame):
     def __init__(self,parent,controller):
@@ -328,7 +359,7 @@ class AreaOfInterestPage(tk.Frame):
         self.scaledImageHeight = originalImageHeight / self.scaleDownBy
         self.centerImageWidth = int(self.scaledImageWidth/2)
         self.centerImageHeight = int(self.scaledImageHeight/2)
-        image_file = TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
+        image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
         self.load = Image.fromarray(image)
         self.resized = self.load.resize((self.scaledImageWidth, self.scaledImageHeight))
@@ -394,8 +425,6 @@ class AreaOfInterestPage(tk.Frame):
         noEvent = 0
         self.updateCanvas(noEvent)
         writeToTextFile("Equations/aoi.txt",str(self.widthLeft)+"\n"+str(self.heightLeft)+"\n"+str(self.widthRight)+"\n"+str(self.heightRight))
-        
-
 
 
 class DifferenceEquationEditorPage(tk.Frame):
@@ -493,6 +522,7 @@ class DifferenceEquationEditorPage(tk.Frame):
 class GUIPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
+        self.controller = controller
         label = tk.Label(self, text="GUI", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         label.pack(pady=10,padx=10)
         self.controller=controller
@@ -502,6 +532,8 @@ class GUIPage(tk.Frame):
         self.pause_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Pause Graph",command=self.pauseAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.pause_button.grid(row=0,column=1)
         self.resume_button= tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Resume Graph",command=self.resumeAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        save_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Save and Exit Test",command=self.endTest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        save_button.grid(row=0,column=2,padx=10)
         buttonFrame.pack()
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
@@ -520,6 +552,11 @@ class GUIPage(tk.Frame):
     def showPicDisplay(self):
         self.pauseAnimation()
         self.controller.show_frame(PictureDisplayPage)
+    def endTest(self):
+        turnOffProcessor()
+        answer = tkMessageBox.showinfo('Saving', message = 'Saving... Please do not touch device.', icon = 'warning')
+        transferDataToStorage()
+        self.controller.backToStartPage()
 
 
    
@@ -531,7 +568,7 @@ class PictureDisplayPage(tk.Frame):
         switch_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View Graphical Data",command=lambda: controller.show_frame(GUIPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         switch_button.pack()  
         
-        image_file = TIFF.open('Biosensor_Images/880nm_12in.tif', mode='r')
+        image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
         self.load = Image.fromarray(image)
         self.scale = .65
@@ -540,10 +577,36 @@ class PictureDisplayPage(tk.Frame):
         self.samplePic = Label(self,image=self.render)
         self.samplePic.image = self.render
         self.samplePic.pack()
+        self.samplePic.bind("<Button-1>", self.updatePicture)
     def showGraph(self):
         app.PAUSE = False
         self.controller.show_frame(PictureDisplayPage)
-        
+    def updatePicture(self,event):
+        self.samplePic.pack_forget()
+        time.sleep(1.6)
+        out = 0 
+        while(out == 0):
+            try:
+                latest_file = max(list_of_files,key=os.path.getctime)
+                out = 1
+            except:
+                list_of_files = glob.glob('Biosensor_Images/*')
+        out = 0
+        while(out==0):
+            try:
+                image_file = TIFF.open(latest_file, mode='r')
+                out = 1
+            except:
+                out = 0
+        image = image_file.read_image()/256
+        self.load = Image.fromarray(image)
+        self.scale = .65
+        self.resized=self.load.resize((int(originalImageWidth*self.scale), int(originalImageHeight*self.scale)))
+        self.render = ImageTk.PhotoImage(self.resized)
+        self.samplePic = Label(self,image=self.render)
+        self.samplePic.image = self.render
+        self.samplePic.pack()
+        self.samplePic.bind("<Button-1>", self.updatePicture)
 
 def writeToTextFile(nameOfFile,textToBeSaved): # writes over the current text file with the input information
     file = open(nameOfFile,"w")
@@ -556,7 +619,15 @@ def turnOffProcessor():
     writeToTextFile('Data/processorState.txt','0')
 def turnOnProcessor():
     writeToTextFile('Data/processorState.txt','1')
-    
+def turnOffCamera():
+    writeToTextFile('Data/cameraState.txt','0')
+def turnOnCamera():
+    writeToTextFile('Data/cameraState.txt','1')    
+
+def transferDataToStorage():
+    os.system("sudo cp -r Biosensor_Images /media/pi/EXTSTORAGE/Portable_Biosensor_Data/.")
+    os.system("sudo rm Biosensor_Images/*.tiff")
+    os.system("sudo cp -r Data /media/pi/EXTSTORAGE/Portable_Biosensor_Data/.")
 
 
 
@@ -568,8 +639,12 @@ ani = animation.FuncAnimation(f, animate, interval=10000)
 # interval is in milliseconds, interval set to 20 second (20000 ms)
 app.mainloop()
 turnOffProcessor()
+transferDataToStorage()
 
 
+    
+    
+    
     
     
     
