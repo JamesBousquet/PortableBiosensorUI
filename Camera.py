@@ -131,7 +131,7 @@ timestart = time.time()
 LASERSTATE = 2
 previousLaserState = 2
 result = 1
-stateFile = 'Data/processorState.txt' 
+stateFile = 'Data/processorState.txt'
 startTimeOFCamera = time.time()
 returnval = initServos()
 while (ON != 0):
@@ -160,8 +160,6 @@ cam_list.Clear()
 GPIO.output(POUT, GPIO.LOW)
 print('Camera Turned Off')
 GPIO.cleanup()
-
-
 
 
 

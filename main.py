@@ -11,6 +11,7 @@ TODO
 add videos
 '''
 import os
+os.system("sudo sh -c 'echo 1000 > /sys/module/usbcore/parameters/usbfs_memory_mb'")
 os.system("sudo python Alignment.py &")
 import matplotlib
 import glob
@@ -60,7 +61,12 @@ YMAX = 1
 f = Figure(figsize=(5,5), dpi=100)
 rawPlot = f.add_subplot(121) # 121 = 1x2 figure plot number 1
 processedPlot = f.add_subplot(122) # 121 = 1x2 figure plot number 2
-
+'''
+rawPlot.xlabel('Seconds')
+rawPlot.ylabel('Raw Values')
+processedPlot.xlabel('Seconds')
+processedPlot.ylabel('Difference Equation Values')
+'''
 
 # animation function for displaying graphs
 def animate(i):
@@ -135,12 +141,11 @@ def animate(i):
         processedPlot.set_xlim([0,xmax])
         rawPlot.set_title('Raw Data')
         processedPlot.set_title('Difference Equation Data')
-'''def updateImage(i):
-    if app.PauseFeed == false:
-        counterGlobal++
-        file = open()
-        
-'''
+        rawPlot.xlabel('Seconds')
+        rawPlot.ylabel('Raw Values')
+        processedPlot.xlabel('Seconds')
+        processedPlot.ylabel('Difference Equation Values')
+
 class PortableBiosensorUI(tk.Tk):
     # Container Class, add a new page here after the class is created
     def __init__(self, *args, **kwargs):
@@ -178,8 +183,6 @@ class PortableBiosensorUI(tk.Tk):
             turnOffCamera()
             self.show_frame(StartPage)
             transferDataToStorage()
-            
-# Lambda function: quick throw away function to allow us to pass arguements with function to command= in button
 
 # Pages
 class StartPage(tk.Frame):
@@ -326,9 +329,7 @@ class AreaOfInterestPage(tk.Frame):
         label.grid(row = 0,columnspan = 2)        
         labelSpace = tk.Label(self.entrySubframe, text=" ", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         label.grid(row = 1,pady = 50)
-        
-        
-        
+        # Binding Evenets to buttons 
         self.widthEntry.bind("<Button-1>", self.showKeyboard)
         self.heightEntry.bind("<Button-1>", self.showKeyboard)
         self.widthEntry.bind("<Return>", self.updateCanvas)
@@ -337,8 +338,7 @@ class AreaOfInterestPage(tk.Frame):
         self.centerWEntry.bind("<Return>", self.updateCanvas)
         self.centerHEntry.bind("<Button-1>", self.showKeyboard)
         self.centerHEntry.bind("<Return>", self.updateCanvas)
-        
-        
+        # Packing
         self.centerWLabel.grid(row=4,pady=10)
         self.centerWEntry.grid(row=4,column=1,pady=10)
         self.centerHLabel.grid(row=5,pady=10)
@@ -347,11 +347,6 @@ class AreaOfInterestPage(tk.Frame):
         self.widthEntry.grid(row=6,column=1,pady=10)
         self.heightLabel.grid(row=7,pady=10)
         self.heightEntry.grid(row=7,column=1,pady=10)
-        
-        # currentCenterCoordinatesLabel = Label(self.entrySubframe, text = "",font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
-        
-
-        
         #scaling factor of picture
         self.scaleDownBy = 2
         self.scale = 1/self.scaleDownBy
@@ -378,19 +373,15 @@ class AreaOfInterestPage(tk.Frame):
         self.currentDimLabel = Label(self.entrySubframe, text = "Image Width: " + str(self.scaledImageWidth*2) + "\n\n Image Height: "+ str(self.scaledImageHeight*2), font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.currentCenterLabel.grid(row=9,column = 1,pady=10)
         self.currentDimLabel.grid(row=10,column = 1,pady=10)
-        
         #button frame
         self.buttonSubframe = tk.Frame(self.entrySubframe,bg=WHITE_COLOR)
         self.buttonSubframe.grid(row = 8,column = 1)
-        
         # submit button
         self.submit_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
-        
         # return button
         self.return_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.return_button.pack(side = tk.LEFT, padx=20)
-        
         # info label
         infoLabel = tk.Label(self.canvasFrame, text="Note: The image shown is scaled by 1/2.\n\nThe image area shown in the blue box is still the\n\narea which will be analysed in the non-scaled image.", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         infoLabel.pack(pady=15)  
@@ -399,12 +390,9 @@ class AreaOfInterestPage(tk.Frame):
         os.system("killall matchbox-keyboard")
         os.system("matchbox-keyboard &")
     def updateCanvas(self,event):
-        
         if ((self.centerWEntry.get() != 0) and(self.centerHEntry.get() != 0) and (self.widthEntry.get() != 0) and (self.heightEntry.get() != 0)):
-            
             centerW = int(int(self.centerWEntry.get())/2)
             centerH = int(int(self.centerHEntry.get())/2)
-            
             x1, y1 = (centerW - 1), (centerH - 1)
             x2, y2 = (centerW + 1), (centerH + 1)
             width = int(self.widthEntry.get())
@@ -431,11 +419,9 @@ class DifferenceEquationEditorPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         self.padyVal = 4
-        
         # left and right frame
         self.leftFrame = tk.Frame(self,bg=WHITE_COLOR)
         self.rightFrame = tk.Frame(self,bg=WHITE_COLOR)
-        
         # equation entry 
         self.title = tk.Label(self.leftFrame, text = "Difference Equation Editor", font = TITLE_FONT,bg = WHITE_COLOR,fg=TEXT_COLOR)
         self.legend = tk.Label(self.leftFrame, text = "For equation use:\n X for first Laser \n Y for second Laser\n\n Note:\nVariables must be capitolized!\nMultiplication Symbol (*) is never assumed!\n Example: 2X must be typed as 2*X", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
@@ -443,10 +429,8 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.denominatorEntryLabel = tk.Label(self.leftFrame, text = "Enter the denominator portion of difference equation:", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.numeratorEntry = tk.Entry(self.leftFrame, font=LARGE_FONT,bg=TEXT_COLOR)
         self.denominatorEntry = tk.Entry(self.leftFrame, font=LARGE_FONT,bg=TEXT_COLOR)
-        
         self.numeratorEntry.bind("<Button-1>", self.showKeyboard)
         self.denominatorEntry.bind("<Button-1>", self.showKeyboard)
-      
         
         self.title.pack()
         self.numeratorEntryLabel.pack(pady=self.padyVal)
@@ -642,9 +626,6 @@ turnOffProcessor()
 transferDataToStorage()
 
 
-    
-    
-    
     
     
     

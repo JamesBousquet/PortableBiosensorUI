@@ -48,24 +48,29 @@ def acquire_images(cam, nodemap, nodemap_tldevice):
         acquisition_mode_continuous = node_acquisition_mode_continuous.GetValue()
         node_acquisition_mode.SetIntValue(acquisition_mode_continuous)
         cam.BeginAcquisition()
+        print 'HERE4.1'
         for i in range(NUM_IMAGES):
             try:
                 image_result = cam.GetNextImage()
+                print 'HERE4.11'
                 if image_result.IsIncomplete():
                     print 'Image incomplete with image status %d ...' % image_result.GetImageStatus()
                 else:
                     image_converted = image_result.Convert(PySpin.PixelFormat_Mono16)
+                    print 'HERE4.12'
                     # Create a unique filename
                     filename = 'PreparationUtils/View.tiff'
                     image_converted.Save(filename)
+                    print 'HERE4.13'
                     #print 'Image saved at %s' % filename
                     image_result.Release()
+                    print 'HERE4.2'
             except PySpin.SpinnakerException as ex:
                 print 'Error: %s' % ex
                 return False
         cam.EndAcquisition()
+        print 'HERE4.3'
     except PySpin.SpinnakerException as ex:
-        print("HEREHEREHER EEEEE")
         print 'Error: %s' % ex
         return False
     return result
@@ -75,31 +80,43 @@ def run_single_camera(cam):
     global nodemap_tldevice
     try:
         result = True
+        print 'here4.1'
         # Retrieve TL device nodemap and print device information
         nodemap_tldevice = cam.GetTLDeviceNodeMap()
+        print 'here4.2'
         # Initialize camera
         cam.Init()
+        print 'here4.3'
         # Retrieve GenICam nodemap
         nodemap = cam.GetNodeMap()
+        print 'here4.4'
         # Configure custom image settings
         if not configure_custom_image_settings(nodemap):
             return False
         # Acquire images
         result &= acquire_images(cam, nodemap, nodemap_tldevice)
+        print 'here4.5'
         # Deinitialize camera
         cam.DeInit()
+        print 'here4.6'
     except PySpin.SpinnakerException as ex:
         print 'Error: %s' % ex
         result = False
     return result
 
+print 'here'
 result = 1
+print 'here1'
 cam_system = PySpin.System.GetInstance()
+print 'here2'
 # Retrieve list of cameras from the system
 cam_list = cam_system.GetCameras()
+print 'here3'
 for i, CAM in enumerate(cam_list):
     cam = CAM
+    print 'here4'
 result &= run_single_camera(cam)
+print 'here5'
 del cam
 cam_list.Clear()
 
