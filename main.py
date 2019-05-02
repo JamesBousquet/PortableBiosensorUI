@@ -374,7 +374,7 @@ class AreaOfInterestPage(tk.Frame):
         self.rectangleDrawn = self.canvas.create_rectangle(0,0,self.scaledImageWidth,self.scaledImageHeight,outline=WHITE_COLOR,fill='grey',stipple='@GraphingAssets/transparent.xbm',width=2)
         self.canvas.pack()
         self.entrySubframe.grid(row = 0, column = 0, sticky="nsew",pady=50)
-        self.canvasFrame.grid(row = 0, column = 1, sticky="nsew",pady=50,padx=70)
+        self.canvasFrame.grid(row = 0, column = 1, sticky="nsew",pady=50,padx=40)
         x1, y1 = (self.scaledImageWidth/2 - 2), (self.scaledImageHeight/2 - 2)
         x2, y2 = (self.scaledImageWidth/2 + 2), (self.scaledImageHeight/2 + 2)
         self.centerDrawn = self.canvas.create_oval(x1, y1, x2, y2, fill=WHITE_COLOR)
