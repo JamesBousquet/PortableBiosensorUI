@@ -49,7 +49,8 @@ MEDIUM_FONT = ("Arial", 12)
 SMALL_FONT = ("Arial", 8)
 style.use("ggplot")
 iconSize = (260,260)
-buttonSize = (200,35)
+buttonSizeLarge = (300,51)
+buttonSize = (300,51)#buttonSize = (200,35)
 buttonSizeSmall = (100,30)
 
 
@@ -201,10 +202,10 @@ class StartPage(tk.Frame):
         label.pack(pady=10, padx=10)
         
         self.subframe = tk.Frame(self,bg=WHITE_COLOR)
-        self.subframe.pack(side="top",padx=250,pady = 50)
+        self.subframe.pack(side="top",padx=250,pady = 30)
         #help_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,text="Need Help?",borderwidth=BORDERWIDTH,compound=CENTER,command=lambda: controller.show_frame(HelpPage),background=BUTTON_COLOR,foreground=TEXT_COLOR)
         #help_button.pack(side=tk.LEFT,padx=15)
-        testPrep_button = tk.Button(self.subframe, font = LARGE_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        testPrep_button = tk.Button(self.subframe, font = MEDIUM_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         testPrep_button.pack(side=tk.LEFT,padx=15)
         
         load = Image.open('UIPictures/teamlogo.png')
