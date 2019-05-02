@@ -105,7 +105,7 @@ def run_single_camera(cam):
     return result
 
 print 'RESULT OF CALL: '
-p_message = PySpin.Camera_SharpeningThreshold_get;
+p_message = _PySpin.Camera_SharpeningThreshold_get;
 print p_message
 result = 1
 print 'here1'
