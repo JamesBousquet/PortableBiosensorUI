@@ -172,7 +172,7 @@ class PortableBiosensorUI(tk.Tk):
         self.config(menu=menu)
         self.show_frame(StartPage)
         menu.add_command(label="Start Page", command = self.backToStartPage)
-	menu.add_command(label="Return", command = self.previousPage)
+	menu.add_command(label="Return", command = self.showPreviousPage)
         self.show_frame(StartPage)
     def show_frame(self,cont):
 	self.previousFrame = self.currentFrame
@@ -188,7 +188,7 @@ class PortableBiosensorUI(tk.Tk):
             turnOffCamera()
             self.show_frame(StartPage)
             transferDataToStorage()
-	def previousPage(self):
+	def showPreviousPage(self):
 		self.show_frame(self.previousPage)
 
 # Pages
