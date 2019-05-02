@@ -172,6 +172,7 @@ class PortableBiosensorUI(tk.Tk):
 		menu.add_command(label="Return", command = self.backToStartPage)
         self.show_frame(StartPage)
         menu.add_command(label="Start Page", command = self.backToStartPage)
+		menu.add_command(label="Return", command = self.backToStartPage)
         self.show_frame(StartPage)
     def show_frame(self,cont):
         frame = self.frames[cont]
