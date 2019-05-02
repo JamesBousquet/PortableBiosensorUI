@@ -231,7 +231,7 @@ class TestPrepPage(tk.Frame):
         label.pack(pady=20, padx=10)
         
         #instructionsLabel = tk.Label(self,text="Select desired option and hit Start Test when ready", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
-        #instructionsLabel.pack(pady=20)
+        #instructionsLabel.pack(pady=10)
         
         # making the icons as buttons
         loadCameraIcon = Image.open('UIPictures/camera_icon.png')
