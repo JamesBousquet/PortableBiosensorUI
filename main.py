@@ -387,9 +387,6 @@ class AreaOfInterestPage(tk.Frame):
         # submit button
         self.submit_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
-        # return button
-        self.return_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        self.return_button.pack(side = tk.LEFT, padx=20)
         # info label
         infoLabel = tk.Label(self.canvasFrame, text="Note: The image shown is scaled by 1/2.\n\nThe image area shown in the blue box is still the\n\narea which will be analysed in the non-scaled image.", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         infoLabel.pack(pady=15)  
@@ -454,9 +451,6 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.submit_button = Button(self.subframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=lambda: self.equationEditorSave(controller),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
         
-        # return button
-        self.return_button = Button(self.subframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background = WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        self.return_button.pack(side = tk.LEFT, padx=20)
         
         # inserting picture
         self.updateEquationShown()
