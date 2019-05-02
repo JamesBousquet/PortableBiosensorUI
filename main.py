@@ -45,6 +45,7 @@ TEXT_COLOR = '#ffffff'
 BUTTON_COLOR = '#1D69A4'
 TITLE_FONT = ("Arial", 36)
 LARGE_FONT = ("Arial", 16)
+MEDIUM_FONT = ("Arial", 12)
 SMALL_FONT = ("Arial", 8)
 style.use("ggplot")
 iconSize = (275,275)
@@ -168,7 +169,7 @@ class PortableBiosensorUI(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
             
-        menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR,font = SMALL_FONT)
+        menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR,font = MEDIUM_FONT)
         self.config(menu=menu)
 	self.currentFrame = StartPage
         self.show_frame(StartPage)
