@@ -202,9 +202,9 @@ class StartPage(tk.Frame):
         
         self.subframe = tk.Frame(self,bg=WHITE_COLOR)
         self.subframe.pack(side="top",padx=250,pady = 50)
-        help_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,text="Need Help?",borderwidth=BORDERWIDTH,compound=CENTER,command=lambda: controller.show_frame(HelpPage),background=BUTTON_COLOR,foreground=TEXT_COLOR)
-        help_button.pack(side=tk.LEFT,padx=15)
-        testPrep_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        #help_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,text="Need Help?",borderwidth=BORDERWIDTH,compound=CENTER,command=lambda: controller.show_frame(HelpPage),background=BUTTON_COLOR,foreground=TEXT_COLOR)
+        #help_button.pack(side=tk.LEFT,padx=15)
+        testPrep_button = tk.Button(self.subframe, font = LARGE_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         testPrep_button.pack(side=tk.LEFT,padx=15)
         
         load = Image.open('UIPictures/teamlogo.png')
