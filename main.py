@@ -190,7 +190,7 @@ class PortableBiosensorUI(tk.Tk):
             self.show_frame(StartPage)
             transferDataToStorage()
     def showPreviousPage(self):
-	self.show_frame(self.previousPage)
+	self.show_frame(self.previousFrame)
 
 # Pages
 class StartPage(tk.Frame):
