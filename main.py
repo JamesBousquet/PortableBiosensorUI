@@ -169,6 +169,8 @@ class PortableBiosensorUI(tk.Tk):
             
         menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR)
         self.config(menu=menu)
+		menu.add_command(label="Return", command = self.backToStartPage)
+        self.show_frame(StartPage)
         menu.add_command(label="Start Page", command = self.backToStartPage)
         self.show_frame(StartPage)
     def show_frame(self,cont):
@@ -176,7 +178,7 @@ class PortableBiosensorUI(tk.Tk):
         frame.tkraise() # raises the frame to the front
         
     def backToStartPage(self):
-        answer = tkMessageBox.askquestion('Return to Start Page', message = 'Are you sure you want to return to start page?', icon = 'warning')
+        answer = tkMessageBox.askquestion('Return to Start Page', message = 'Are you sure you want to return to start page? Any tests will end if continued.', icon = 'warning')
         if answer == 'yes':
             app.PAUSE = True
             turnOffProcessor()
