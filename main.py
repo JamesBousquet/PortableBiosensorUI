@@ -44,6 +44,7 @@ WHITE_COLOR = '#1D69A4' # Red = 29  Green = 105  Blue = 164
 TEXT_COLOR = '#ffffff'
 BUTTON_COLOR = '#1D69A4'
 TITLE_FONT = ("Arial", 36)
+LARGE2_FONT = ("Arial", 24)
 LARGE_FONT = ("Arial", 16)
 MEDIUM_FONT = ("Arial", 12)
 SMALL_FONT = ("Arial", 8)
@@ -205,7 +206,7 @@ class StartPage(tk.Frame):
         self.subframe.pack(side="top",padx=250,pady = 30)
         #help_button = tk.Button(self.subframe, highlightthickness = 0, image=controller.buttonBackground,text="Need Help?",borderwidth=BORDERWIDTH,compound=CENTER,command=lambda: controller.show_frame(HelpPage),background=BUTTON_COLOR,foreground=TEXT_COLOR)
         #help_button.pack(side=tk.LEFT,padx=15)
-        testPrep_button = tk.Button(self.subframe, font = MEDIUM_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        testPrep_button = tk.Button(self.subframe, font = LARGE2_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Start Test Preperation",command=lambda: controller.show_frame(TestPrepPage),background=BUTTON_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         testPrep_button.pack(side=tk.LEFT,padx=15)
         
         load = Image.open('UIPictures/teamlogo.png')
