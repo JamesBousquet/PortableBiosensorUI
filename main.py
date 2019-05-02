@@ -168,7 +168,7 @@ class PortableBiosensorUI(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
             
-        menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR)
+        menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR,font = SMALL_FONT)
         self.config(menu=menu)
 	self.currentFrame = StartPage
         self.show_frame(StartPage)
@@ -287,8 +287,6 @@ class AlignmentCameraPage(tk.Frame):
         self.label = tk.Label(self, text="Tap Picture to Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
         self.label.pack(pady=5, padx=15)
         self.timeStart = 0
-        self.back_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Return",command=lambda: controller.show_frame(TestPrepPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        self.back_button.pack(pady=15)
         image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
         self.load = Image.fromarray(image)
