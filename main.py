@@ -156,7 +156,7 @@ class PortableBiosensorUI(tk.Tk):
         resizedSmallImg = img.resize(buttonSizeSmall, Image.ANTIALIAS)
         self.buttonBackground = ImageTk.PhotoImage(resizedImg)
         self.buttonBackgroundSmall = ImageTk.PhotoImage(resizedSmallImg)
-	self.currentFrame = StartPage
+	
         container = tk.Frame(self)
         self.geometry('1250x700')
         container.pack(side="top", fill="both", expand = True)
@@ -170,6 +170,7 @@ class PortableBiosensorUI(tk.Tk):
             
         menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR)
         self.config(menu=menu)
+	self.currentFrame = StartPage
         self.show_frame(StartPage)
         menu.add_command(label="Start Page", command = self.backToStartPage)
 	menu.add_command(label="Return", command = self.showPreviousPage)
