@@ -48,7 +48,7 @@ LARGE_FONT = ("Arial", 16)
 MEDIUM_FONT = ("Arial", 12)
 SMALL_FONT = ("Arial", 8)
 style.use("ggplot")
-iconSize = (275,275)
+iconSize = (260,260)
 buttonSize = (175,30)
 buttonSizeSmall = (100,30)
 
