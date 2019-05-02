@@ -49,7 +49,7 @@ MEDIUM_FONT = ("Arial", 12)
 SMALL_FONT = ("Arial", 8)
 style.use("ggplot")
 iconSize = (260,260)
-buttonSize = (175,30)
+buttonSize = (200,35)
 buttonSizeSmall = (100,30)
 
 
@@ -266,7 +266,7 @@ class TestPrepPage(tk.Frame):
         startIconPic.grid(row=1,column=1,padx=15,pady=5)
         startIconPic.bind("<Button-1>", self.startTest)
         
-        self.buttonFrame.pack(pady=30)
+        self.buttonFrame.pack(pady=25)
         
         
     def startTest(self,event):
@@ -428,7 +428,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.rightFrame = tk.Frame(self,bg=WHITE_COLOR)
         # equation entry 
         self.title = tk.Label(self.leftFrame, text = "Difference Equation Editor", font = TITLE_FONT,bg = WHITE_COLOR,fg=TEXT_COLOR)
-        self.legend = tk.Label(self.leftFrame, text = "For equation use:\n X for first Laser \n Y for second Laser\n\n Note:\nVariables must be capitolized!\nMultiplication Symbol (*) is never assumed!\n Example: 2X must be typed as 2*X", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        self.legend = tk.Label(self.leftFrame, text = "For equation use:\n X for first Laser \n Y for second Laser\n\n Note:\nVariables must be capitalized!\nMultiplication Symbol (*) is never assumed!\n Example: 2X must be typed as 2*X", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.numeratorEntryLabel = tk.Label(self.leftFrame, text = "\nEnter the numerator portion of difference equation: ", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.denominatorEntryLabel = tk.Label(self.leftFrame, text = "Enter the denominator portion of difference equation:", font = LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         self.numeratorEntry = tk.Entry(self.leftFrame, font=LARGE_FONT,bg=TEXT_COLOR)
