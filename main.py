@@ -266,7 +266,7 @@ class TestPrepPage(tk.Frame):
         startIconPic.grid(row=1,column=1,padx=15,pady=5)
         startIconPic.bind("<Button-1>", self.startTest)
         
-        self.buttonFrame.pack(pady=100)
+        self.buttonFrame.pack(pady=30)
         
         
     def startTest(self,event):
