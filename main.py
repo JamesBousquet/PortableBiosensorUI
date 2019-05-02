@@ -230,8 +230,8 @@ class TestPrepPage(tk.Frame):
         label = tk.Label(self, text="Test Preparation Menu", font=TITLE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         label.pack(pady=20, padx=10)
         
-        instructionsLabel = tk.Label(self,text="Select desired option and hit Start Test when ready", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
-        instructionsLabel.pack(pady=20)
+        #instructionsLabel = tk.Label(self,text="Select desired option and hit Start Test when ready", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        #instructionsLabel.pack(pady=20)
         
         # making the icons as buttons
         loadCameraIcon = Image.open('UIPictures/camera_icon.png')
@@ -255,7 +255,7 @@ class TestPrepPage(tk.Frame):
         renderAOIIcon = ImageTk.PhotoImage(resizedAOIIcon)
         AOIIconPic = Label(self.buttonFrame,image=renderAOIIcon)
         AOIIconPic.image = renderAOIIcon
-        AOIIconPic.grid(row=0,column=2,padx=15,pady=5)
+        AOIIconPic.grid(row=1,column=0,padx=15,pady=5)
         AOIIconPic.bind("<Button-1>", self.aoiEvent)
         
         loadStartIcon = Image.open('UIPictures/start_icon.png')
@@ -263,7 +263,7 @@ class TestPrepPage(tk.Frame):
         renderStartIcon = ImageTk.PhotoImage(resizedStartIcon)
         startIconPic = Label(self.buttonFrame,image=renderStartIcon)
         startIconPic.image = renderStartIcon
-        startIconPic.grid(row=0,column=3,padx=15,pady=5)
+        startIconPic.grid(row=1,column=1,padx=15,pady=5)
         startIconPic.bind("<Button-1>", self.startTest)
         
         self.buttonFrame.pack(pady=100)
