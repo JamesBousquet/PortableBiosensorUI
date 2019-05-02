@@ -156,6 +156,7 @@ class PortableBiosensorUI(tk.Tk):
         resizedSmallImg = img.resize(buttonSizeSmall, Image.ANTIALIAS)
         self.buttonBackground = ImageTk.PhotoImage(resizedImg)
         self.buttonBackgroundSmall = ImageTk.PhotoImage(resizedSmallImg)
+	self.currentFrame = StartPage
         container = tk.Frame(self)
         self.geometry('1250x700')
         container.pack(side="top", fill="both", expand = True)
@@ -171,11 +172,13 @@ class PortableBiosensorUI(tk.Tk):
         self.config(menu=menu)
         self.show_frame(StartPage)
         menu.add_command(label="Start Page", command = self.backToStartPage)
-	menu.add_command(label="Return", command = self.backToStartPage)
+	menu.add_command(label="Return", command = self.previousPage)
         self.show_frame(StartPage)
     def show_frame(self,cont):
+	self.previousFrame = self.currentFrame
         frame = self.frames[cont]
         frame.tkraise() # raises the frame to the front
+		self.currentFrame = frame
         
     def backToStartPage(self):
         answer = tkMessageBox.askquestion('Return to Start Page', message = 'Are you sure you want to return to start page? Any tests will end if continued.', icon = 'warning')
@@ -185,6 +188,8 @@ class PortableBiosensorUI(tk.Tk):
             turnOffCamera()
             self.show_frame(StartPage)
             transferDataToStorage()
+	def previousPage(self):
+		self.show_frame(self.previousPage)
 
 # Pages
 class StartPage(tk.Frame):
