@@ -44,7 +44,7 @@ WHITE_COLOR = '#1D69A4' # Red = 29  Green = 105  Blue = 164
 TEXT_COLOR = '#ffffff'
 BUTTON_COLOR = '#1D69A4'
 TITLE_FONT = ("Arial", 36)
-LARGE2_FONT = ("Arial", 24)
+LARGE2_FONT = ("Arial", 20)
 LARGE_FONT = ("Arial", 16)
 MEDIUM_FONT = ("Arial", 12)
 SMALL_FONT = ("Arial", 8)
@@ -52,8 +52,8 @@ style.use("ggplot")
 iconSize = (260,260)
 buttonSizeLarge = (300,51)
 buttonSize = (300,51)#buttonSize = (200,35)
-buttonSizeSmall = (100,30)
-
+buttonSizeSmall = (170,35)
+SMALLBUTTON_FONT = MEDIUM_FONT
 
 YMAX = 1
 
@@ -386,7 +386,7 @@ class AreaOfInterestPage(tk.Frame):
         self.buttonSubframe = tk.Frame(self.entrySubframe,bg=WHITE_COLOR)
         self.buttonSubframe.grid(row = 8,column = 1)
         # submit button
-        self.submit_button = Button(self.buttonSubframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.submit_button = Button(self.buttonSubframe, font = SMALLBUTTON_FONT, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
         # info label
         infoLabel = tk.Label(self.canvasFrame, text="Note: The image shown is scaled by 1/2.\n\nThe image area shown in the blue box is still the\n\narea which will be analysed in the non-scaled image.", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
@@ -449,7 +449,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.subframe.pack(side="top",pady=self.padyVal)
         
         # submit button
-        self.submit_button = Button(self.subframe, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=lambda: self.equationEditorSave(controller),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.submit_button = Button(self.subframe,  font = SMALLBUTTON_FONT, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=lambda: self.equationEditorSave(controller),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
         
         
@@ -514,12 +514,12 @@ class GUIPage(tk.Frame):
         label.pack(pady=10,padx=10)
         self.controller=controller
         buttonFrame = Frame(self,bg=WHITE_COLOR)       
-        switch_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View the Sample",command=self.showPicDisplay,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        switch_button = tk.Button(buttonFrame, font = LARGE2_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View the Sample",command=self.showPicDisplay,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         switch_button.grid(row=0,column=0,padx=10)
-        self.pause_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Pause Graph",command=self.pauseAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.pause_button = tk.Button(buttonFrame, font = LARGE2_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Pause Graph",command=self.pauseAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.pause_button.grid(row=0,column=1)
-        self.resume_button= tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Resume Graph",command=self.resumeAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
-        save_button = tk.Button(buttonFrame, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Save and Exit Test",command=self.endTest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        self.resume_button= tk.Button(buttonFrame, font = LARGE2_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER,text="Resume Graph",command=self.resumeAnimation,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        save_button = tk.Button(buttonFrame, font = LARGE2_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="Save and Exit Test",command=self.endTest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         save_button.grid(row=0,column=2,padx=10)
         buttonFrame.pack()
         canvas = FigureCanvasTkAgg(f, self)
@@ -552,7 +552,7 @@ class PictureDisplayPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         label = tk.Label(self, text="Sample Picture Display", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
         label.pack(pady=10, padx=10)
-        switch_button = tk.Button(self, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View Graphical Data",command=lambda: controller.show_frame(GUIPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
+        switch_button = tk.Button(self, font = LARGE2_FONT, highlightthickness = 0, image=controller.buttonBackground,compound=CENTER, text="View Graphical Data",command=lambda: controller.show_frame(GUIPage),background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         switch_button.pack()  
         
         image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
