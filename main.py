@@ -178,7 +178,7 @@ class PortableBiosensorUI(tk.Tk):
 	self.previousFrame = self.currentFrame
         frame = self.frames[cont]
         frame.tkraise() # raises the frame to the front
-		self.currentFrame = frame
+	self.currentFrame = frame
         
     def backToStartPage(self):
         answer = tkMessageBox.askquestion('Return to Start Page', message = 'Are you sure you want to return to start page? Any tests will end if continued.', icon = 'warning')
