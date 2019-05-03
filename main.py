@@ -464,7 +464,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         # inserting picture
         self.updateEquationShown()
         self.load = Image.open('UIPictures/lasersetuplabeled.png')
-        self.resized=self.load.resize((475, 400), Image.ANTIALIAS)
+        self.resized=self.load.resize((550, 464), Image.ANTIALIAS)
         self.render = ImageTk.PhotoImage(self.resized)
         self.laserSetupPic = Label(self.rightFrame,image=self.render)
         self.laserSetupPic.image = self.render
