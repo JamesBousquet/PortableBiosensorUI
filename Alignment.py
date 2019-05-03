@@ -6,6 +6,9 @@ def configure_custom_image_settings(nodemap):
     try:
         gamma_enable_node = PySpin.CBooleanPtr(nodemap.GetNode("GammaEnabled"))
         gamma_enable_node.SetValue(True)
+        gamma_node = PySpin.CIntegerPtr(nodemap.GetNode("Gamma"))
+        gamma_node.SetValue(1)
+
 
         result = True
         
