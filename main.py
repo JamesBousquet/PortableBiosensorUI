@@ -175,7 +175,7 @@ class PortableBiosensorUI(tk.Tk):
             
         self.menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR,font = MEDIUM_FONT)
         
-        self.config(menu=menu)
+        self.config(menu=self.menu)
 	self.currentFrame = StartPage
         self.show_frame(StartPage)
         self.menu.add_command(label="Start Page", command = self.backToStartPage)

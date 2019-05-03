@@ -8,6 +8,8 @@ GPIO.setup(11,GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(12,GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(POUT,GPIO.OUT)
 NUM_IMAGES = 1
+# for useful information on general camera attributes check out the link below:
+# https://www.edmundoptics.com/resources/application-notes/imaging/basics-of-digital-camera-settings-for-improved-imaging-results/
 
 img_num = 1
 GPIO.output(POUT, GPIO.LOW)
