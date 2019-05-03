@@ -18,6 +18,7 @@ stateFile = 'Data/processorState.txt'
 file = open(stateFile,"w")
 file.write('1')
 file.close()
+os.system("sudo python test.py &")
 
 
 
