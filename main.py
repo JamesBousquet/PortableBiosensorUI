@@ -148,8 +148,8 @@ def animate(i):
         #rawPlot.ylabel('Raw Values')
         #processedPlot.xlabel('Seconds')
         #processedPlot.ylabel('Difference Equation Values')
-        rawPlot.legend(bbox_to_anchor=(0,0,2,.102), loc=3, ncol=2, borderaxespad=1)
-        processedPlot.legend(bbox_to_anchor=(0,0,2,.102), loc=3, ncol=2, borderaxespad=1)
+        rawPlot.legend(bbox_to_anchor=(0,0,2,.102), loc='best', ncol=1, borderaxespad=1)
+        processedPlot.legend(bbox_to_anchor=(0,0,2,.102), loc='best', ncol=1, borderaxespad=1)
 class PortableBiosensorUI(tk.Tk):
     # Container Class, add a new page here after the class is created
     def __init__(self, *args, **kwargs):
@@ -288,7 +288,7 @@ class AlignmentCameraPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         #self.label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
         #self.label.grid(row=0,column=0,padx=15,pady=5)
-        self.instruction_label = tk.Label(self, text="Tap Picture/nto Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
+        self.instruction_label = tk.Label(self, text="Tap Picture to Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
         self.instruction_label.pack(padx=15,pady=5)
         self.timeStart = 0
         image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
