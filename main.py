@@ -281,7 +281,7 @@ class TestPrepPage(tk.Frame):
         app.PAUSE = False
         os.system('sudo python processing.py &')
         self.controller.show_frame(GUIPage)
-        app.menu.delete(1)
+        app.menu.delete(2)
         
     def cameraEvent(self,event):
         self.controller.show_frame(AlignmentCameraPage)
