@@ -4,6 +4,7 @@ import PySpin
 NUM_IMAGES = 1
 def configure_custom_image_settings(nodemap):
     try:
+        node_gainauto_mode = PySpin.CEnumerationPtr(nodemap.GetNode("GainAuto"))
         result = True
         node_pixel_format = PySpin.CEnumerationPtr(nodemap.GetNode('PixelFormat'))
         if PySpin.IsAvailable(node_pixel_format) and PySpin.IsWritable(node_pixel_format):
@@ -112,7 +113,7 @@ print 'here2'
 # Retrieve list of cameras from the system
 cam_list = cam_system.GetCameras()
 print 'here3'
-node_gainauto_mode = PySpin.CEnumerationPtr(nodemap.GetNode("GainAuto"))
+
 for i, CAM in enumerate(cam_list):
     cam = CAM
     print 'here4'
