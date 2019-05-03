@@ -397,7 +397,7 @@ class AreaOfInterestPage(tk.Frame):
         self.submit_button = Button(self.buttonSubframe, font = SMALLBUTTON_FONT, highlightthickness = 0, image=controller.buttonBackgroundSmall,compound=CENTER, text="Submit",command=self.saveAreaOfInterest,background=WHITE_COLOR,foreground=TEXT_COLOR,borderwidth=BORDERWIDTH)
         self.submit_button.pack(side = tk.LEFT, padx=20)
         # info label
-        infoLabel = tk.Label(self.canvasFrame, text="Note: The image shown is scaled by 1/2.\n\nThe image area shown in the blue box is still the\n\narea which will be analysed in the non-scaled image.", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
+        infoLabel = tk.Label(self.canvasFrame, text="Note: The image shown is scaled by 1/2.\nThe image area shown in the blue box is still the\narea which will be analysed in the non-scaled image.", font=LARGE_FONT,bg=WHITE_COLOR,fg=TEXT_COLOR)
         infoLabel.pack(pady=15)  
         
     def showKeyboard(self,event):
