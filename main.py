@@ -99,9 +99,9 @@ def animate(i):
                     if(laserNumber==3):   
                         xList3.append(float(x))
                         yList3.append(float(y))
-        rawPlot.scatter(xList1, yList1, color = 'r')
-        rawPlot.scatter(xList2, yList2, color = '#ffff05')
-        rawPlot.scatter(xList3, yList3, color = 'b')
+        rawPlot.scatter(xList1, yList1, color = 'r',label = 'Laser 1')
+        rawPlot.scatter(xList2, yList2, color = '#ffff05',label = 'Laser 2')
+        rawPlot.scatter(xList3, yList3, color = 'b',label = 'Laser 3')
         pullDataProcessed = []
         pullDataProcessed.append(open("Data/processedData.txt","r").read())
         i = 1
@@ -130,9 +130,9 @@ def animate(i):
                     if(laserNumber==31):
                         xList31.append(float(x))
                         yList31.append(float(y))
-        processedPlot.scatter(xList12, yList12, color = '#ffa500')
-        processedPlot.scatter(xList23, yList23, color = 'g')
-        processedPlot.scatter(xList31, yList31, color = 'm')
+        processedPlot.scatter(xList12, yList12, color = '#ffa500',label = 'Lasers 1 and 2')
+        processedPlot.scatter(xList23, yList23, color = 'g',label = 'Lasers 2 and 3')
+        processedPlot.scatter(xList31, yList31, color = 'm',label = 'Lasers 3 and 1')
         try:
             xmax = int(xList1[-1]+5)
             ymax = 1.2*float(YMAX)
