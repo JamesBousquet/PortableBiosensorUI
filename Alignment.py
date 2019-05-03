@@ -5,6 +5,7 @@ NUM_IMAGES = 1
 def configure_custom_image_settings(nodemap):
     try:
         node_gainauto_mode = PySpin.CEnumerationPtr(nodemap.GetNode("GainAuto"))
+        print(node_gainauto_mode)
         result = True
         node_pixel_format = PySpin.CEnumerationPtr(nodemap.GetNode('PixelFormat'))
         if PySpin.IsAvailable(node_pixel_format) and PySpin.IsWritable(node_pixel_format):
