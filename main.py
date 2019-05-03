@@ -294,8 +294,8 @@ class AlignmentCameraPage(tk.Frame):
         image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
         self.load = Image.fromarray(image)
-        self.scale = .60
-        self.resized=self.load.resize((int(originalImageWidth*.7), int(originalImageHeight*.55)))
+        self.scale = .8
+        self.resized=self.load.resize((int(originalImageWidth*self.scale), int(originalImageHeight*self.scale)))
         self.render = ImageTk.PhotoImage(self.resized)
         self.samplePic = Label(self,image=self.render)
         self.samplePic.image = self.render
