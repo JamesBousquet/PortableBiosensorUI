@@ -163,7 +163,7 @@ class PortableBiosensorUI(tk.Tk):
         self.buttonBackgroundSmall = ImageTk.PhotoImage(resizedSmallImg)
 	
         container = tk.Frame(self)
-        self.geometry('1250x800')
+        self.geometry('1250x850')
         container.pack(side="top", fill="both", expand = True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
