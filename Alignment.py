@@ -112,6 +112,7 @@ print 'here2'
 # Retrieve list of cameras from the system
 cam_list = cam_system.GetCameras()
 print 'here3'
+node_gainauto_mode = PySpin.CEnumerationPtr(nodemap.GetNode("GainAuto"))
 for i, CAM in enumerate(cam_list):
     cam = CAM
     print 'here4'
