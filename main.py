@@ -144,10 +144,11 @@ def animate(i):
         processedPlot.set_xlim([0,xmax])
         rawPlot.set_title('Raw Data')
         processedPlot.set_title('Difference Equation Data')
-        #rawPlot.xlabel('Seconds')
-        #rawPlot.ylabel('Raw Values')
-        #processedPlot.xlabel('Seconds')
-        #processedPlot.ylabel('Difference Equation Values')
+        rawPlot.xlabel('Seconds')
+        rawPlot.ylabel('Raw Values')
+        processedPlot.xlabel('Seconds')
+        processedPlot.ylabel('Difference Equation Values')
+        rawPlot.legend(bbox_to_anchor=(0,1.02,1,.102), loc=3, ncol=2, borderaxespad=0)
 
 class PortableBiosensorUI(tk.Tk):
     # Container Class, add a new page here after the class is created
