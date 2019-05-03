@@ -287,9 +287,9 @@ class AlignmentCameraPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
         self.label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
-        self.label.pack(pady=5, padx=15)
-        self.label = tk.Label(self, text="Tap Picture to Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
-        self.label.pack(pady=5, padx=15)
+        self.label.grid(row=0,column=0,padx=15,pady=5)
+        self.instruction_label = tk.Label(self, text="Tap Picture/nto Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
+        self.instruction_label.grid(row=1,column=0,padx=15,pady=5)
         self.timeStart = 0
         image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
@@ -299,7 +299,7 @@ class AlignmentCameraPage(tk.Frame):
         self.render = ImageTk.PhotoImage(self.resized)
         self.samplePic = Label(self,image=self.render)
         self.samplePic.image = self.render
-        self.samplePic.pack()
+        self.samplePic.grid(column=1,padx=15,pady=5)
         self.samplePic.bind("<Button-1>", self.updatePicture)
         
     def updatePicture(self,event):
