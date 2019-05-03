@@ -13,6 +13,9 @@ img_num = 1
 GPIO.output(POUT, GPIO.LOW)
 def configure_custom_image_settings(nodemap):
     try:
+        gamma_enable_node = PySpin.CBooleanPtr(nodemap.GetNode("GammaEnabled"))
+        gamma_enable_node.SetValue(True)
+
         result = True
         node_pixel_format = PySpin.CEnumerationPtr(nodemap.GetNode('PixelFormat'))
         if PySpin.IsAvailable(node_pixel_format) and PySpin.IsWritable(node_pixel_format):
