@@ -72,7 +72,7 @@ processedPlot.ylabel('Difference Equation Values')
 '''
 
 # animation function for displaying graphs
-def animate(i):
+def animate(i): 
     if app.PAUSE == False:
         global YMAX
         pullData = []
@@ -286,10 +286,10 @@ class TestPrepPage(tk.Frame):
 class AlignmentCameraPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent,bg=WHITE_COLOR)
-        self.label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
-        self.label.grid(row=0,column=0,padx=15,pady=5)
+        #self.label = tk.Label(self, text="Alignment Camera", font=TITLE_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
+        #self.label.grid(row=0,column=0,padx=15,pady=5)
         self.instruction_label = tk.Label(self, text="Tap Picture/nto Update", font=SMALL_FONT,fg=TEXT_COLOR,background=WHITE_COLOR)
-        self.instruction_label.grid(row=1,column=0,padx=15,pady=5)
+        self.instruction_label.pack(padx=15,pady=5)
         self.timeStart = 0
         image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
         image = image_file.read_image()/256
@@ -299,7 +299,7 @@ class AlignmentCameraPage(tk.Frame):
         self.render = ImageTk.PhotoImage(self.resized)
         self.samplePic = Label(self,image=self.render)
         self.samplePic.image = self.render
-        self.samplePic.grid(column=1,padx=15,pady=5)
+        self.samplePic.pack(padx=15,pady=5)
         self.samplePic.bind("<Button-1>", self.updatePicture)
         
     def updatePicture(self,event):
@@ -308,7 +308,7 @@ class AlignmentCameraPage(tk.Frame):
         if timeProgress > 3:
             self.inProgress = True
             os.system("sudo python Alignment.py &")
-            self.samplePic.grid_forget()
+            self.samplePic.pack_forget()
             time.sleep(1.6)
             out = 0
             image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
@@ -318,7 +318,7 @@ class AlignmentCameraPage(tk.Frame):
             self.render = ImageTk.PhotoImage(self.resized)
             self.samplePic = Label(self,image=self.render)
             self.samplePic.image = self.render
-            self.samplePic.grid(column=1,padx=15,pady=5)
+            self.samplePic.pack(padx=15,pady=5)
             self.samplePic.bind("<Button-1>", self.updatePicture)
             self.inProgress = False
         
