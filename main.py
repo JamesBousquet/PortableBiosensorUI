@@ -470,7 +470,7 @@ class DifferenceEquationEditorPage(tk.Frame):
         self.laserSetupPic.image = self.render
         self.laserSetupPic.pack()
         self.legend.pack()
-        self.leftFrame.grid(row = 0,padx = 100,pady=25)
+        self.leftFrame.grid(row = 0,padx = 50,pady=25)
         self.rightFrame.grid(row = 0, column = 1)
         
     def updateEquationShown(self):
