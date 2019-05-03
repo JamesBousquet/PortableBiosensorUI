@@ -148,8 +148,8 @@ def animate(i):
         #rawPlot.ylabel('Raw Values')
         #processedPlot.xlabel('Seconds')
         #processedPlot.ylabel('Difference Equation Values')
-        rawPlot.legend(bbox_to_anchor=(0,1.02,1,.102), loc=3, ncol=2, borderaxespad=1)
-        processedPlot.legend(bbox_to_anchor=(0,1.02,1,.102), loc=3, ncol=2, borderaxespad=1)
+        rawPlot.legend(bbox_to_anchor=(0,0,2,.102), loc=3, ncol=2, borderaxespad=1)
+        processedPlot.legend(bbox_to_anchor=(0,0,2,.102), loc=3, ncol=2, borderaxespad=1)
 class PortableBiosensorUI(tk.Tk):
     # Container Class, add a new page here after the class is created
     def __init__(self, *args, **kwargs):
