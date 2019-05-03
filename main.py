@@ -308,7 +308,7 @@ class AlignmentCameraPage(tk.Frame):
         if timeProgress > 3:
             self.inProgress = True
             os.system("sudo python Alignment.py &")
-            self.samplePic.pack_forget()
+            self.samplePic.grid_forget()
             time.sleep(1.6)
             out = 0
             image_file = TIFF.open('PreparationUtils/View.tiff', mode='r')
@@ -318,7 +318,7 @@ class AlignmentCameraPage(tk.Frame):
             self.render = ImageTk.PhotoImage(self.resized)
             self.samplePic = Label(self,image=self.render)
             self.samplePic.image = self.render
-            self.samplePic.pack()
+            self.samplePic.grid(column=1,padx=15,pady=5)
             self.samplePic.bind("<Button-1>", self.updatePicture)
             self.inProgress = False
         
