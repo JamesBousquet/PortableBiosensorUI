@@ -150,6 +150,7 @@ def animate(i):
         #processedPlot.ylabel('Difference Equation Values')
         rawPlot.legend(loc='best', ncol=1, borderaxespad=0)
         processedPlot.legend(loc='best', ncol=1, borderaxespad=0)
+        
 class PortableBiosensorUI(tk.Tk):
     # Container Class, add a new page here after the class is created
     def __init__(self, *args, **kwargs):
@@ -172,12 +173,13 @@ class PortableBiosensorUI(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
             
-        menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR,font = MEDIUM_FONT)
+        self.menu = tk.Menu(self,bg = "blue",fg=TEXT_COLOR,font = MEDIUM_FONT)
+        
         self.config(menu=menu)
 	self.currentFrame = StartPage
         self.show_frame(StartPage)
-        menu.add_command(label="Start Page", command = self.backToStartPage)
-	menu.add_command(label="Return", command = self.showPreviousPage)
+        self.menu.add_command(label="Start Page", command = self.backToStartPage)
+	self.menu.add_command(label="Return", command = self.showPreviousPage)
         self.show_frame(StartPage)
     def show_frame(self,cont):
 	self.previousFrame = self.currentFrame
@@ -193,8 +195,11 @@ class PortableBiosensorUI(tk.Tk):
             turnOffCamera()
             self.show_frame(StartPage)
             transferDataToStorage()
+            self.addReturnButton()
     def showPreviousPage(self):
 	self.show_frame(self.previousFrame)
+    def addReturnButton(self):
+        self.menu.add_command(label="Return", command = self.showPreviousPage)
 
 # Pages
 class StartPage(tk.Frame):
@@ -276,6 +281,8 @@ class TestPrepPage(tk.Frame):
         app.PAUSE = False
         os.system('sudo python processing.py &')
         self.controller.show_frame(GUIPage)
+        app.menu.delete(1)
+        
     def cameraEvent(self,event):
         self.controller.show_frame(AlignmentCameraPage)
     def aoiEvent(self,event):
